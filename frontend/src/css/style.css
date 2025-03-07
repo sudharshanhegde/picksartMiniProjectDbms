@@ -1,0 +1,187 @@
+ 
+/* ===== Artist Dashboard Styles ===== */
+.dashboard-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 2rem 0;
+    background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+    color: white;
+    border-radius: 0 0 20px 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.artist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.artist-card {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+}
+
+.artist-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.artist-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.icon-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #e74c3c;
+    cursor: pointer;
+    padding: 0.2rem;
+}
+
+.form-section {
+    background: white;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.form-group {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.btn-primary {
+    background: #3498db;
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
+}
+
+.loading, .empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: #7f8c8d;
+    font-style: italic;
+    grid-column: 1 / -1;
+}
+
+.error {
+    color: #e74c3c;
+    padding: 1rem;
+    text-align: center;
+}
+
+
+/* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navigation Bar */
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: white;
+    border-bottom: 1px solid #ddd;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.search-bar {
+    width: 30%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+}
+
+nav ul li a {
+    text-decoration: none;
+    color: black;
+    font-size: 14px;
+}
+
+.auth-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.login-btn,
+.signup-btn {
+    padding: 8px 15px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.signup-btn {
+    background-color: black;
+    color: white;
+    border-radius: 4px;
+}
+
+/* Hero Section */
+.hero {
+    position: relative;
+    text-align: left;
+    color: black;
+}
+
+.hero img {
+    width: 100%;
+    height: auto;
+}
+
+.hero-text {
+    position: absolute;
+    top: 30%;
+    left: 60%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 40%;
+}
+
+.browse-btn {
+    background: transparent;
+    border: 2px solid black;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 4px;
+}
