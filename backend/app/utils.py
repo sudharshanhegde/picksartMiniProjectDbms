@@ -1,5 +1,10 @@
 from decimal import Decimal
-from flask.json import JSONEncoder
+try:
+    # For Flask 2.0+
+    from flask.json.provider import JSONEncoder
+except ImportError:
+    # For older Flask versions
+    from flask.json import JSONEncoder
 from datetime import datetime
 
 class CustomJSONEncoder(JSONEncoder):

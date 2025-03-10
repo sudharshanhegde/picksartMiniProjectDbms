@@ -23,7 +23,7 @@ function Home() {
       >
         <Box
           component="img"
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5b/Lorenz_attractor_yb.svg/1200px-Lorenz_attractor_yb.svg.png"
+          src="https://science.oregonstate.edu/sites/science.oregonstate.edu/files/styles/2000_x_1100/public/2019-07/oct2018_math-on-the-canvas-acclaimed-artist-explores-math-as-art.jpg?h=acf9f222&itok=bfRTAzoo"
           sx={{
             position: 'absolute',
             width: '100%',

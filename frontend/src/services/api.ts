@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { LoginResponse, SignUpResponse, Artwork, Artist } from '../types/api';
 
-const API_BASE_URL = 'http://192.168.1.40:8000/api';
+const API_BASE_URL = 'http://192.168.1.33:8000/api';
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -66,7 +66,7 @@ export const fetchGalleries = async () => {
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
-    if (token) {
+    if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     console.log('API Request:', {
