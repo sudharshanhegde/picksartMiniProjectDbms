@@ -25,6 +25,8 @@ def add_gallery():
     conn = get_db_connection()
     cursor = conn.cursor()
     cursor.execute("INSERT INTO galleries (name, location) VALUES (%s, %s)", (name, location))
+    #these here is used to insert the gallery into the database
+    #the gallery name and location are inserted into the database
     conn.commit()
     cursor.close()
     conn.close()

@@ -1,6 +1,8 @@
 from flask import Blueprint, request, jsonify
 from ..config import get_db_connection
 from ..auth import token_required
+#token_required is a decorator that we created in the auth.py file
+#it is used to check if the user is authenticated before accessing the cart functionality
 from mysql.connector import Error
 from decimal import Decimal
 
@@ -29,6 +31,8 @@ def sync_cart(current_user):
             (current_user['user_id'],)
         )
         existing_order = cursor.fetchone()
+        #this query will check if the user has a pending order
+        #if the user has a pending order, the order_id will be returned
         print(f"Existing order: {existing_order}")
 
         if existing_order:
@@ -62,6 +66,8 @@ def sync_cart(current_user):
                     """,
                     (order_id, item['artwork_id'], item['quantity'], item['price'])
                 )
+                #this query will insert the items into the order_items table
+                #the order_id will be the ID of the order that was created or found
                 total_amount += float(item['price']) * int(item['quantity'])
             except Exception as item_error:
                 print(f"Error inserting item: {str(item_error)}")
@@ -121,6 +127,8 @@ def get_cart(current_user):
             """,
             (current_user['user_id'],)
         )
+        #this query will get the pending order for the customer
+        #the order_id and total_amount will be returned
         
         order = cursor.fetchone()
         if not order:
@@ -143,7 +151,8 @@ def get_cart(current_user):
             """,
             (order['order_id'],)
         )
-        
+        #this query will get all the items in the order_items table
+        #the items will be joined with the artworks table to get the title and image_url
         items = cursor.fetchall()
         print(f"Found {len(items)} cart items")
 
@@ -212,6 +221,10 @@ def checkout(current_user):
             """,
             (current_user['user_id'],)
         )
+        #this query will get the pending order for the customer
+        #it will also get the items in the order_items table
+        #the items will be joined with the artworks table to get the title and image_url
+        #the items will be joined with the artists table to get the artist name and email
         items = cursor.fetchall()
         print(f"Found order items: {items}")
 
@@ -238,6 +251,7 @@ def checkout(current_user):
             "UPDATE orders SET status = 'confirmed' WHERE order_id = %s",
             (order_id,)
         )
+        #this query will update the status of the order to confirmed
 
         conn.commit()
         print(f"Successfully processed checkout for order: {order_id}")
@@ -299,6 +313,8 @@ def get_orders(current_user):
             """,
             (current_user['user_id'],)
         )
+        #this query will get all the confirmed orders for the customer
+        #the order_id, total_amount, status, and created_at will be returned            
         orders = cursor.fetchall()
         
         if not orders:
@@ -326,6 +342,8 @@ def get_orders(current_user):
                 """,
                 (order['order_id'],)
             )
+            #this query will get all the items in the order_items table
+        #the items will be joined with the artworks table to get the title and image_url
             items = cursor.fetchall()
             
             order_data = {
@@ -343,7 +361,8 @@ def get_orders(current_user):
                 } for item in items]
             }
             order_list.append(order_data)
-
+       #we are creating a list of dictionaries for each order
+        #each dictionary will contain the order_id, total_amount, status, and created_at
         return jsonify({
             'orders': order_list
         }), 200

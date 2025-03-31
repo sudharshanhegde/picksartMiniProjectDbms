@@ -1,16 +1,25 @@
 from flask import Blueprint, request, jsonify
 from app.config import get_db_connection
 import bcrypt
+#bcrypt is a library that is used to hash passwords
+#it is used to hash the passwords before storing them in the database
 import jwt
+#jwt is a library that is used to generate and verify JSON Web Tokens
+#it is used to generate a token when a user logs in
 from datetime import datetime, timedelta
 from app.config import Config
 import logging
+#logging is a module that is used to log messages
 
 auth_routes = Blueprint('auth_routes', __name__)
 
 def hash_password(password):
     salt = bcrypt.gensalt()
+    #gensalt() function will generate a random salt
+    #salt is a random value that is added to the password before hashing
     return bcrypt.hashpw(password.encode('utf-8'), salt).decode('utf-8')  # Store as string
+#hash_password() function will hash the password using bcrypt
+#it will return the hashed password as a string
 
 def check_password(password, hashed):
     try:
@@ -18,14 +27,17 @@ def check_password(password, hashed):
     except Exception as e:
         print(f"Password check error: {str(e)}")
         return False
-
+#check_password() function will check if the password matches the hashed password
+#it will return True if the password matches the hashed password
 def generate_token(user_id, role):
     return jwt.encode({
         'user_id': user_id,
         'role': role,
         'exp': datetime.utcnow() + timedelta(days=1)
     }, Config.SECRET_KEY, algorithm='HS256')
-
+#generate_token() function will generate a JSON Web Token
+#it will contain the user_id, role, and expiration time
+#it will return the token as a string
 @auth_routes.route('/auth/signup', methods=['POST'])
 def signup():
     try:
@@ -35,15 +47,16 @@ def signup():
         
         if not data or 'email' not in data or 'password' not in data or 'name' not in data or 'role' not in data:
             return jsonify({"error": "Name, email, password, and role are required"}), 400
-            
+            #telling about all the requirments for a signup to be happening
         # Check if email already exists
         role = data['role'].lower()
         if role not in ['customer', 'artist', 'gallery']:
             return jsonify({"error": "Invalid role"}), 400
+        #the variety of roles provided in our website is specified here.
             
         conn = get_db_connection()
         cursor = conn.cursor(dictionary=True)
-        
+        #dictionary=True will return the rows as dictionaries
         # Check if email exists in any table
         tables = ['customers', 'artists', 'galleries']
         for table in tables:
@@ -52,10 +65,10 @@ def signup():
                 cursor.close()
                 conn.close()
                 return jsonify({"error": "Email already exists"}), 400
-        
+        #this will check if the email already exists in any of the tables
         # Hash password
         hashed_password = hash_password(data['password'])
-        
+        #this is a try catch block where i will shuffle between the roles such as customer artist and gallery.
         try:
             if role == 'customer':
                 cursor.execute("""
@@ -106,18 +119,21 @@ def signup():
             print(f"Database error: {str(e)}")
             conn.rollback()
             return jsonify({"error": "Database error occurred"}), 500
-
+#if we are having some error in the database then we will rollback the changes and return a 500 error
     except Exception as e:
         print(f"Signup error: {str(e)}")
         return jsonify({"error": "Failed to create account"}), 500
-
+#this is if we are facing a problem while creating the account then we will return a 500 error
     finally:
         try:
             cursor.close()
             conn.close()
         except:
             pass
-
+#pass is used to handle the exception
+#it will not do anything if an exception occurs
+#this is used to close the cursor and connection
+#by these we will be done with our signup part.
 @auth_routes.route('/auth/login', methods=['POST'])
 def login():
     try:
@@ -197,3 +213,5 @@ def login():
     except Exception as e:
         print(f"Login error: {str(e)}")
         return jsonify({"error": "Login failed"}), 500 
+    
+    #at here we are done with our login part.

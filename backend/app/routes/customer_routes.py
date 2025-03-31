@@ -26,6 +26,8 @@ def add_customer():
     cursor = conn.cursor()
     cursor.execute("INSERT INTO customers (name, email, phone,password_hash) VALUES (%s, %s, %s,%s)", 
                    (name, email, phone,"password_hash"))
+    #these here is used to insert the customer into the database
+    #password_hash is set to a default value of "password_hash"
     conn.commit()
     cursor.close()
     conn.close()

@@ -28,6 +28,9 @@ def add_order():
     cursor = conn.cursor()
     cursor.execute("INSERT INTO orders (customer_id, order_date, payment_status, total_amount) VALUES (%s, %s, %s, %s)", 
                    (customer_id, order_date, payment_status, total_amount))
+     #this is inserting of all data takem from user into order table
+    # Get the last inserted order id
+    # This is used to get the order id of the order that was just inserted  
     order_id = cursor.lastrowid  # Get the last inserted order ID
     conn.commit()
     cursor.close()

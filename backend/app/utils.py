@@ -1,16 +1,14 @@
 from decimal import Decimal
-try:
-    # For Flask 2.0+
-    from flask.json.provider import JSONEncoder
-except ImportError:
-    # For older Flask versions
-    from flask.json import JSONEncoder
 from datetime import datetime
+import json
 
-class CustomJSONEncoder(JSONEncoder):
+class CustomJSONEncoder(json.JSONEncoder):
     def default(self, obj):
-        if isinstance(obj, Decimal):
-            return float(obj)
-        if isinstance(obj, datetime):
-            return obj.isoformat()
-        return super().default(obj) 
+        try:
+            if isinstance(obj, Decimal):
+                return float(obj)
+            if isinstance(obj, datetime):
+                return obj.isoformat()
+            return super().default(obj)
+        except Exception as e:
+            return str(obj) 
