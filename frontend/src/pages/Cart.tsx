@@ -183,26 +183,28 @@ function Cart() {
               <Typography>Subtotal</Typography>
               <Typography>${total.toLocaleString()}</Typography>
             </Box>
-            <Box sx={{ mt: 4, display: 'flex', justifyContent: 'flex-end' }}>
+            <Box sx={{ mt: 4, display: 'flex', flexDirection: 'column', gap: 2 }}>
               <Button
                 variant="contained"
                 color="primary"
                 size="large"
+                fullWidth
                 onClick={handleCheckout}
                 disabled={items.length === 0}
+                sx={{ py: 1.5 }}
               >
                 Proceed to Checkout
               </Button>
+              <Button
+                variant="outlined"
+                color="error"
+                fullWidth
+                onClick={() => dispatch(clearCart())}
+                disabled={loading}
+              >
+                Clear Cart
+              </Button>
             </Box>
-            <Button
-              variant="outlined"
-              color="error"
-              fullWidth
-              onClick={() => dispatch(clearCart())}
-              disabled={loading}
-            >
-              Clear Cart
-            </Button>
           </Card>
         </Grid>
       </Grid>

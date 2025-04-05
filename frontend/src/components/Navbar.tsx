@@ -41,7 +41,13 @@ const Navbar: React.FC = () => {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar 
+      position="fixed" 
+      sx={{ 
+        boxShadow: 'none',
+        backgroundColor: 'primary.main'
+      }}
+    >
       <Toolbar>
         <Typography
           variant="h6"

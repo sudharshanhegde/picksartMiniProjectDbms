@@ -70,23 +70,18 @@ const GalleryList: React.FC = () => {
                   <Typography variant="body2" color="text.secondary" paragraph>
                     {gallery.description || 'No description available'}
                   </Typography>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                     📍 {gallery.location}
                   </Typography>
                 </CardContent>
                 <CardActions>
                   <Button 
                     size="small" 
-                    component={Link} 
-                    to={`/galleries/${gallery.gallery_id}`}
-                  >
-                    View Gallery
-                  </Button>
-                  <Button 
-                    size="small" 
                     href={`mailto:${gallery.email}`}
+                    fullWidth
+                    variant="contained"
                   >
-                    Contact
+                    Contact Gallery
                   </Button>
                 </CardActions>
               </Card>

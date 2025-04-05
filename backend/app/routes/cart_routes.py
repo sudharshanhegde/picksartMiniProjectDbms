@@ -47,7 +47,7 @@ def sync_cart(current_user):
             print(f"Creating new order for customer: {current_user['user_id']}")
             # Create new order with NULL shipping_address
             cursor.execute(
-                "INSERT INTO orders (customer_id, total_amount, shipping_address, status) VALUES (%s, 0, NULL, 'pending')",
+                "INSERT INTO orders (customer_id, total_amount, status) VALUES (%s, 0, 'pending')",
                 (current_user['user_id'],)
             )
             order_id = cursor.lastrowid
