@@ -26,7 +26,8 @@ dbconfig = {
     "password": Config.MYSQL_PASSWORD,
     "database": Config.MYSQL_DB,
     "pool_name": "mypool",
-    "pool_size": 5
+    "pool_size": 20,  # Increase pool size from 5 to 20
+    "pool_reset_session": True  # Reset session after returning to pool
 }
 # Create a connection pool
 # The pool_name parameter is used to identify the pool, and the pool_size parameter is used to set the number of connections in the pool.   

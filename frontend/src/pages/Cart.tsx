@@ -51,8 +51,8 @@ function Cart() {
   const handleCheckout = async () => {
     try {
       const response = await axiosInstance.post('/api/cart/checkout');
-      // Navigate to the confirmation page with the order details
-      navigate('/order-confirmation', { 
+      // Navigate to the shipping page with the order details
+      navigate('/shipping', { 
         state: { order: response.data.order }
       });
     } catch (error) {

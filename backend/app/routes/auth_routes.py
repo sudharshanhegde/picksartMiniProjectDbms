@@ -72,18 +72,18 @@ def signup():
         try:
             if role == 'customer':
                 cursor.execute("""
-                    INSERT INTO customers (name, email, password_hash)
-                    VALUES (%s, %s, %s)
-                """, (data['name'], data['email'], hashed_password))
+                    INSERT INTO customers (name, email, password_hash, address, phone_number)
+                    VALUES (%s, %s, %s, %s, %s)
+                """, (data['name'], data['email'], hashed_password, 
+                      data.get('address', ''), data.get('phone_number', '')))
                 table_name = 'customers'
                 id_field = 'customer_id'
                 
             elif role == 'artist':
                 cursor.execute("""
-                    INSERT INTO artists (name, email, password_hash, bio, specialization)
-                    VALUES (%s, %s, %s, %s, %s)
-                """, (data['name'], data['email'], hashed_password, 
-                     data.get('bio', ''), data.get('specialization', '')))
+                    INSERT INTO artists (name, email, password_hash)
+                    VALUES (%s, %s, %s)
+                """, (data['name'], data['email'], hashed_password))
                 table_name = 'artists'
                 id_field = 'artist_id'
                 
@@ -111,7 +111,9 @@ def signup():
                     "id": user[id_field],
                     "name": user['name'],
                     "email": user['email'],
-                    "role": role
+                    "role": role,
+                    **({"address": user.get('address', ''), 
+                        "phone_number": user.get('phone_number', '')} if role == 'customer' else {})
                 }
             }), 201
 
@@ -202,6 +204,8 @@ def login():
             user_data["artist_id"] = user[id_field]
         elif role == 'customer':
             user_data["customer_id"] = user[id_field]
+            user_data["address"] = user.get('address', '')
+            user_data["phone_number"] = user.get('phone_number', '')
         elif role == 'gallery':
             user_data["gallery_id"] = user[id_field]
 
@@ -215,3 +219,37 @@ def login():
         return jsonify({"error": "Login failed"}), 500 
     
     #at here we are done with our login part.
+
+@auth_routes.route('/auth/admin-login', methods=['POST'])
+def admin_login():
+    try:
+        print("Received admin login request")
+        data = request.get_json()
+        print(f"Admin login data: {data}")
+        
+        if not data or 'admin_id' not in data or 'password' not in data:
+            return jsonify({"error": "Admin ID and password are required"}), 400
+
+        # Hardcoded admin credentials (you should change these in production)
+        ADMIN_ID = "admin123"
+        ADMIN_PASSWORD = "admin@123"  # In production, use environment variables
+        
+        if data['admin_id'] != ADMIN_ID or data['password'] != ADMIN_PASSWORD:
+            return jsonify({"error": "Invalid admin credentials"}), 401
+        
+        # Generate admin token
+        token = generate_token(ADMIN_ID, 'admin')
+        
+        return jsonify({
+            "token": token,
+            "user": {
+                "id": ADMIN_ID,
+                "name": "Admin",
+                "email": "admin@picksart.com",
+                "role": "admin"
+            }
+        }), 200
+
+    except Exception as e:
+        print(f"Admin login error: {str(e)}")
+        return jsonify({"error": "Admin login failed"}), 500 

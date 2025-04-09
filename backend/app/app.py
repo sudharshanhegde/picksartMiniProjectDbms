@@ -10,6 +10,8 @@ from .routes.order_routes import order_routes
 from .routes.order_item_routes import order_item_routes
 #these all are just importing the routes from the routes folder
 from .routes.cart_routes import cart
+from .routes.shipping_routes import shipping
+from .routes.dashboard_routes import dashboard_bp
 from .utils import CustomJSONEncoder
 #customJSONEncoder is used to serialize the data into json format
 import logging
@@ -23,6 +25,15 @@ def create_app():
     app.config.from_object(Config)
     #this is used to get the configuration from the config file
     #this is the main file that runs the application
+    
+    # Test database connection
+    try:
+        conn = get_db_connection()
+        conn.close()
+        print("Database connection successful")
+    except Exception as e:
+        print(f"Error connecting to database: {e}")
+        raise
     
     # Set up JSON encoder
     app.json_encoder = CustomJSONEncoder
@@ -101,6 +112,8 @@ def create_app():
     app.register_blueprint(order_routes, url_prefix='/api')
     app.register_blueprint(order_item_routes, url_prefix='/api')
     app.register_blueprint(cart, url_prefix='/api')
+    app.register_blueprint(shipping, url_prefix='/api')
+    app.register_blueprint(dashboard_bp, url_prefix='/api')
     #register_blueprint is used to register the blueprints with the URL prefix
     #this is used to register the routes with the URL prefix
     #this is used to define the URL prefix for the routes

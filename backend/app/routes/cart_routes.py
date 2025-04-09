@@ -221,10 +221,6 @@ def checkout(current_user):
             """,
             (current_user['user_id'],)
         )
-        #this query will get the pending order for the customer
-        #it will also get the items in the order_items table
-        #the items will be joined with the artworks table to get the title and image_url
-        #the items will be joined with the artists table to get the artist name and email
         items = cursor.fetchall()
         print(f"Found order items: {items}")
 
@@ -245,27 +241,35 @@ def checkout(current_user):
                 'artist_name': item['artist_name']
             })
             total_amount += float(item['price_at_time']) * item['quantity']
-
-        # Update order status to confirmed
-        cursor.execute(
-            "UPDATE orders SET status = 'confirmed' WHERE order_id = %s",
-            (order_id,)
-        )
-        #this query will update the status of the order to confirmed
+        
+        # The order remains in 'pending' status until shipping details are added
+        # It will be updated to 'confirmed' after shipping information is provided
 
         conn.commit()
         print(f"Successfully processed checkout for order: {order_id}")
         
-        # Return complete order details for confirmation page
+        # Fetch customer details for address
+        cursor.execute(
+            "SELECT name, address, phone_number FROM customers WHERE customer_id = %s",
+            (current_user['user_id'],)
+        )
+        customer = cursor.fetchone()
+        
+        # Return order details for shipping page
         return jsonify({
-            'message': 'Order placed successfully',
+            'message': 'Order processed successfully',
             'order': {
                 'order_id': order_id,
                 'total_amount': total_amount,
                 'date': items[0]['created_at'].isoformat() if items[0]['created_at'] else None,
-                'status': 'confirmed',
+                'status': 'pending',
                 'customer_name': current_user['name'],
-                'items': order_items
+                'items': order_items,
+                'customer_details': {
+                    'name': customer['name'],
+                    'address': customer.get('address', ''),
+                    'phone_number': customer.get('phone_number', '')
+                }
             }
         }), 200
 

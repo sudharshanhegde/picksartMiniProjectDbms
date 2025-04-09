@@ -34,6 +34,16 @@ def token_required(f):
             
             print(f"Token decoded: user_id={user_id}, role={user_role}")
 
+            # Special case for admin
+            if user_role == 'admin':
+                current_user = {
+                    'user_id': user_id,
+                    'role': 'admin',
+                    'name': 'Admin',
+                    'email': 'admin@picksart.com'
+                }
+                return f(current_user, *args, **kwargs)
+
             # Get user details from the appropriate table based on role
             conn = get_db_connection()
             cursor = conn.cursor(dictionary=True)
@@ -57,6 +67,8 @@ def token_required(f):
                     FROM galleries WHERE gallery_id = %s
                 ''', (user_id,))
             else:
+                cursor.close()
+                conn.close()
                 return jsonify({'message': 'Invalid user role'}), 401
             #if someone not specified their roles we will return a 401 error response
             #if the user role is not one of the expected roles, we will return a 401 error response
@@ -79,4 +91,12 @@ def token_required(f):
             print(f"Token validation error: {str(e)}")
             return jsonify({'message': f'Error: {str(e)}'}), 500
 
+    return decorated 
+
+def admin_required(f):
+    @wraps(f)
+    def decorated(current_user, *args, **kwargs):
+        if current_user.get('role') != 'admin':
+            return jsonify({'message': 'Admin access required'}), 403
+        return f(current_user, *args, **kwargs)
     return decorated 

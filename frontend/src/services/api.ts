@@ -10,6 +10,15 @@ const api = axios.create({
   },
 });
 
+export interface SignupData {
+  name: string;
+  email: string;
+  password: string;
+  role?: string;
+  address?: string;
+  phone_number?: string;
+}
+
 // Auth APIs
 export const login = async (credentials: { 
   email: string; 
@@ -23,13 +32,9 @@ export const login = async (credentials: {
   return response.data;
 };
 
-export const signup = async (userData: {
-  name: string;
-  email: string;
-  password: string;
-  role: string;
-}): Promise<SignUpResponse> => {
-  console.log('Signup data:', userData);
+export const signup = async (userData: SignupData): Promise<SignUpResponse> => {
+  console.log("Signing up with:", userData);
+  
   const response = await api.post<SignUpResponse>('/auth/signup', userData);
   return response.data;
 };

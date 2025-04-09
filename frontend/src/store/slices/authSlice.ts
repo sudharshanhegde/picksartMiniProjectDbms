@@ -6,7 +6,7 @@ interface AuthState {
     id?: number;
     email?: string;
     name?: string;
-    role?: 'customer' | 'artist' | 'gallery';
+    role?: 'customer' | 'artist' | 'gallery' | 'admin';
   } | null;
   token: string | null;
 }

@@ -1,107 +1,95 @@
-import { useState, useEffect } from 'react';
-import {
-  Container,
-  Typography,
-  Box,
-  Grid,
-  Card,
-  CardContent,
-  CardMedia,
-  Divider
-} from '@mui/material';
-import ArtworkForm from '../components/ArtworkForm';
-import { fetchArtworks } from '../services/api';
-import LoadingSpinner from '../components/LoadingSpinner';
-import { useSelector } from 'react-redux';
-import { RootState } from '../store/store';
+import React, { useEffect, useState } from 'react';
+import { Box, Container, Typography, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Grid, Card, CardContent } from '@mui/material';
+import PageLayout from '../components/PageLayout';
+import api from '../services/api';
 
-interface Artwork {
-  artwork_id: number;
-  title: string;
-  description: string;
-  price: number;
-  image_url: string;
-  artist_id: number;
+interface Sale {
+  artwork_title: string;
+  quantity: number;
+  customer_name: string;
+  date: string;
 }
 
-function ArtistDashboard() {
-  const [artworks, setArtworks] = useState<Artwork[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-  const user = useSelector((state: RootState) => state.auth.user);
+interface ArtistStatsResponse {
+  total_artworks: number;
+  sales: Sale[];
+}
+
+const ArtistDashboard = () => {
+  const [stats, setStats] = useState<ArtistStatsResponse>({
+    total_artworks: 0,
+    sales: []
+  });
 
   useEffect(() => {
-    loadArtworks();
+    const fetchStats = async () => {
+      try {
+        const response = await api.get<ArtistStatsResponse>('/dashboard/artist/stats');
+        setStats(response.data);
+      } catch (error) {
+        console.error('Error fetching artist stats:', error);
+      }
+    };
+
+    fetchStats();
   }, []);
 
-  const loadArtworks = async () => {
-    try {
-      if (user?.artist_id) {
-        const data = await fetchArtworks();
-        // Filter artworks to show only the current artist's works
-        const artistArtworks = data.filter((artwork: any) => artwork.artist_id === user.artist_id);
-        setArtworks(artistArtworks);
-      }
-    } catch (err: any) {
-      setError('Failed to load artworks');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (loading) {
-    return <LoadingSpinner message="Loading your dashboard..." />;
-  }
-
   return (
-    <Container maxWidth="lg">
-      <Box sx={{ mt: 4, mb: 4 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
+    <PageLayout>
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        <Typography variant="h4" gutterBottom>
           Artist Dashboard
         </Typography>
-        
-        <ArtworkForm onArtworkAdded={loadArtworks} />
-        
-        <Divider sx={{ my: 4 }} />
-        
-        <Typography variant="h5" component="h2" gutterBottom>
-          Your Artworks
-        </Typography>
-        
-        {error && (
-          <Typography color="error" sx={{ mb: 2 }}>
-            {error}
-          </Typography>
-        )}
 
         <Grid container spacing={3}>
-          {artworks.map((artwork: any) => (
-            <Grid item xs={12} sm={6} md={4} key={artwork.artwork_id}>
-              <Card>
-                <CardMedia
-                  component="img"
-                  height="200"
-                  image={artwork.image_url}
-                  alt={artwork.title}
-                />
-                <CardContent>
-                  <Typography variant="h6" gutterBottom>
-                    {artwork.title}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {artwork.description}
-                  </Typography>
-                  <Typography variant="h6" color="primary" sx={{ mt: 1 }}>
-                    ${artwork.price}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
+          {/* Total Artworks Card */}
+          <Grid item xs={12} md={6}>
+            <Card>
+              <CardContent>
+                <Typography variant="h6" gutterBottom>
+                  Total Artworks
+                </Typography>
+                <Typography variant="h3">
+                  {stats.total_artworks}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          {/* Sales Table */}
+          <Grid item xs={12}>
+            <Paper sx={{ p: 2 }}>
+              <Typography variant="h6" gutterBottom>
+                Sales History
+              </Typography>
+              <TableContainer>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Artwork Title</TableCell>
+                      <TableCell>Customer</TableCell>
+                      <TableCell align="right">Quantity</TableCell>
+                      <TableCell>Date</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {stats.sales.map((sale, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{sale.artwork_title}</TableCell>
+                        <TableCell>{sale.customer_name}</TableCell>
+                        <TableCell align="right">{sale.quantity}</TableCell>
+                        <TableCell>{new Date(sale.date).toLocaleDateString()}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Paper>
+          </Grid>
         </Grid>
-      </Box>
-    </Container>
+      </Container>
+    </PageLayout>
   );
-}
+};
 
 export default ArtistDashboard; 

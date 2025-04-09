@@ -6,6 +6,8 @@ export interface LoginResponse {
     firstName?: string;
     lastName?: string;
     role?: string;
+    address?: string;
+    phone_number?: string;
   };
 }
 
@@ -16,6 +18,9 @@ export interface SignUpResponse {
     email: string;
     firstName: string;
     lastName: string;
+    role?: string;
+    address?: string;
+    phone_number?: string;
   };
 }
 

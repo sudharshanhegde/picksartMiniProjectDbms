@@ -55,7 +55,7 @@ const Navbar: React.FC = () => {
           to="/"
           sx={{ flexGrow: 1, textDecoration: 'none', color: 'inherit' }}
         >
-          PicksArrt
+          PicksArt
         </Typography>
 
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -74,13 +74,22 @@ const Navbar: React.FC = () => {
             Galleries
           </Button>
           {!user && (
-            <Button
-              component={Link}
-              to="/gallery-registration"
-              sx={{ color: 'white' }}
-            >
-              Register Gallery
-            </Button>
+            <>
+              <Button
+                component={Link}
+                to="/gallery-registration"
+                sx={{ color: 'white' }}
+              >
+                Register Gallery
+              </Button>
+              <Button
+                component={Link}
+                to="/admin-login"
+                sx={{ color: 'white' }}
+              >
+                Admin Login
+              </Button>
+            </>
           )}
           <IconButton
             color="inherit"
@@ -127,6 +136,26 @@ const Navbar: React.FC = () => {
                     }}
                   >
                     Artist Dashboard
+                  </MenuItem>
+                )}
+                {user.role === 'admin' && (
+                  <MenuItem
+                    onClick={() => {
+                      handleClose();
+                      navigate('/admin-dashboard');
+                    }}
+                  >
+                    Admin Dashboard
+                  </MenuItem>
+                )}
+                {user.role === 'customer' && (
+                  <MenuItem
+                    onClick={() => {
+                      handleClose();
+                      navigate('/customer-dashboard');
+                    }}
+                  >
+                    Customer Dashboard
                   </MenuItem>
                 )}
                 <MenuItem onClick={handleLogout}>Logout</MenuItem>

@@ -21,6 +21,7 @@ import { fetchArtworks } from '../services/api';
 import LoadingSpinner from '../components/LoadingSpinner';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../store/slices/cartSlice';
+import PageLayout from '../components/PageLayout';
 
 interface Artwork {
   artwork_id: number;
@@ -98,112 +99,114 @@ function BrowseArt() {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Browse Artworks
-      </Typography>
-
-      {/* Filters and Search */}
-      <Paper sx={{ p: 2, mb: 4 }}>
-        <Grid container spacing={3} alignItems="center">
-          <Grid item xs={12} md={4}>
-            <TextField
-              fullWidth
-              label="Search artworks"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              placeholder="Search by title, description, or artist"
-            />
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <FormControl fullWidth>
-              <InputLabel>Sort by</InputLabel>
-              <Select
-                value={sortBy}
-                label="Sort by"
-                onChange={(e) => setSortBy(e.target.value)}
-              >
-                <MenuItem value="newest">Newest First</MenuItem>
-                <MenuItem value="priceAsc">Price: Low to High</MenuItem>
-                <MenuItem value="priceDesc">Price: High to Low</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <Typography gutterBottom>Price Range</Typography>
-            <Slider
-              value={priceRange}
-              onChange={(_, newValue) => setPriceRange(newValue as number[])}
-              valueLabelDisplay="auto"
-              min={0}
-              max={10000}
-              step={100}
-            />
-            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-              <Typography variant="body2">${priceRange[0]}</Typography>
-              <Typography variant="body2">${priceRange[1]}</Typography>
-            </Box>
-          </Grid>
-        </Grid>
-      </Paper>
-
-      {error && (
-        <Typography color="error" sx={{ mb: 2 }}>
-          {error}
+    <PageLayout>
+      <Container maxWidth="lg" sx={{ py: 4 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Browse Artworks
         </Typography>
-      )}
 
-      <Grid container spacing={3}>
-        {filteredAndSortedArtworks().map((artwork) => (
-          <Grid item xs={12} sm={6} md={4} key={artwork.artwork_id}>
-            <Card>
-              <CardMedia
-                component="img"
-                height="300"
-                image={artwork.image_url}
-                alt={artwork.title}
-                sx={{ objectFit: 'cover' }}
-                onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-                  e.currentTarget.src = 'https://via.placeholder.com/400x300?text=Image+Not+Available';
-                }}
+        {/* Filters and Search */}
+        <Paper sx={{ p: 2, mb: 4 }}>
+          <Grid container spacing={3} alignItems="center">
+            <Grid item xs={12} md={4}>
+              <TextField
+                fullWidth
+                label="Search artworks"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search by title, description, or artist"
               />
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  {artwork.title}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" gutterBottom>
-                  by {artwork.artist_name}
-                </Typography>
-                <Typography variant="body2" color="text.secondary" paragraph>
-                  {artwork.description}
-                </Typography>
-                <Typography variant="h6" color="primary">
-                  ${artwork.price.toLocaleString()}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small" color="primary">
-                  View Details
-                </Button>
-                <Button 
-                  size="small" 
-                  color="primary"
-                  onClick={() => handleAddToCart(artwork)}
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <FormControl fullWidth>
+                <InputLabel>Sort by</InputLabel>
+                <Select
+                  value={sortBy}
+                  label="Sort by"
+                  onChange={(e) => setSortBy(e.target.value)}
                 >
-                  Add to Cart
-                </Button>
-              </CardActions>
-            </Card>
+                  <MenuItem value="newest">Newest First</MenuItem>
+                  <MenuItem value="priceAsc">Price: Low to High</MenuItem>
+                  <MenuItem value="priceDesc">Price: High to Low</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Typography gutterBottom>Price Range</Typography>
+              <Slider
+                value={priceRange}
+                onChange={(_, newValue) => setPriceRange(newValue as number[])}
+                valueLabelDisplay="auto"
+                min={0}
+                max={10000}
+                step={100}
+              />
+              <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Typography variant="body2">${priceRange[0]}</Typography>
+                <Typography variant="body2">${priceRange[1]}</Typography>
+              </Box>
+            </Grid>
           </Grid>
-        ))}
-      </Grid>
+        </Paper>
 
-      {filteredAndSortedArtworks().length === 0 && (
-        <Typography textAlign="center" sx={{ mt: 4 }}>
-          No artworks found matching your criteria.
-        </Typography>
-      )}
-    </Container>
+        {error && (
+          <Typography color="error" sx={{ mb: 2 }}>
+            {error}
+          </Typography>
+        )}
+
+        <Grid container spacing={3}>
+          {filteredAndSortedArtworks().map((artwork) => (
+            <Grid item xs={12} sm={6} md={4} key={artwork.artwork_id}>
+              <Card>
+                <CardMedia
+                  component="img"
+                  height="300"
+                  image={artwork.image_url}
+                  alt={artwork.title}
+                  sx={{ objectFit: 'cover' }}
+                  onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                    e.currentTarget.src = 'https://via.placeholder.com/400x300?text=Image+Not+Available';
+                  }}
+                />
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    {artwork.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" gutterBottom>
+                    by {artwork.artist_name}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" paragraph>
+                    {artwork.description}
+                  </Typography>
+                  <Typography variant="h6" color="primary">
+                    ${artwork.price.toLocaleString()}
+                  </Typography>
+                </CardContent>
+                <CardActions>
+                  <Button size="small" color="primary">
+                    View Details
+                  </Button>
+                  <Button 
+                    size="small" 
+                    color="primary"
+                    onClick={() => handleAddToCart(artwork)}
+                  >
+                    Add to Cart
+                  </Button>
+                </CardActions>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+
+        {filteredAndSortedArtworks().length === 0 && (
+          <Typography textAlign="center" sx={{ mt: 4 }}>
+            No artworks found matching your criteria.
+          </Typography>
+        )}
+      </Container>
+    </PageLayout>
   );
 }
 
