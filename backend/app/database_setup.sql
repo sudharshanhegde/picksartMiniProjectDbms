@@ -22,6 +22,8 @@ CREATE TABLE artists (
 
 -- Customers table
 CREATE TABLE customers (
+    phone int,
+    adress varchar(50),
     customer_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
@@ -79,6 +81,15 @@ CREATE TABLE order_items (
     FOREIGN KEY (artwork_id) REFERENCES artworks(artwork_id) ON DELETE RESTRICT
 );
 
+-- Create a new shipping_details table to store order-specific shipping information
+CREATE TABLE IF NOT EXISTS shipping_details (
+    shipping_id INT PRIMARY KEY AUTO_INCREMENT,
+    order_id INT NOT NULL,
+    address VARCHAR(255) NOT NULL,
+    phone_number VARCHAR(20) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (order_id) REFERENCES orders(order_id)
+); 
 -- Sample artists
 INSERT IGNORE INTO artists (name, email, password_hash) VALUES
 ('John Smith', 'john@example.com', '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewFX.gtkn.4xGxK2'),
