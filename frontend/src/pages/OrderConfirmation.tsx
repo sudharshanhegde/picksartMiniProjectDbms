@@ -64,8 +64,8 @@ const OrderConfirmation = () => {
       item.title,
       item.artist_name,
       item.quantity,
-      `$${item.price.toFixed(2)}`,
-      `$${(item.price * item.quantity).toFixed(2)}`
+      `₹${item.price.toFixed(2)}`,
+      `₹${(item.price * item.quantity).toFixed(2)}`
     ]);
     
     autoTable(doc, {
@@ -78,7 +78,7 @@ const OrderConfirmation = () => {
     
     // Add total amount
     const finalY = doc.lastAutoTable.finalY || 130;
-    doc.text(`Total Amount: $${order.total_amount.toFixed(2)}`, 150, finalY + 20, { align: 'right' });
+    doc.text(`Total Amount: ₹${order.total_amount.toFixed(2)}`, 150, finalY + 20, { align: 'right' });
     
     // Save the PDF
     doc.save(`order-${order.order_id}.pdf`);
@@ -107,7 +107,7 @@ const OrderConfirmation = () => {
               <Typography>Date: {formattedDate}</Typography>
               <Typography>Status: {order.status}</Typography>
               <Typography variant="h6" sx={{ mt: 2 }}>
-                Total Amount: ${order.total_amount.toFixed(2)}
+                Total Amount: ₹{order.total_amount.toFixed(2)}
               </Typography>
             </Grid>
             
@@ -153,7 +153,7 @@ const OrderConfirmation = () => {
                       Quantity: {item.quantity}
                     </Typography>
                     <Typography variant="body2">
-                      Price: ${item.price.toFixed(2)}
+                      Price: ₹{item.price.toFixed(2)}
                     </Typography>
                   </CardContent>
                 </Card>

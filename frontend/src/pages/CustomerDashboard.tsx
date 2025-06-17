@@ -114,8 +114,8 @@ const CustomerDashboard = () => {
       order.artwork_title,
       order.artist_name,
       order.quantity,
-      `$${order.price.toFixed(2)}`,
-      `$${(order.price * order.quantity).toFixed(2)}`
+      `₹${order.price.toFixed(2)}`,
+      `₹${(order.price * order.quantity).toFixed(2)}`
     ]];
     
     autoTable(doc, {
@@ -128,7 +128,7 @@ const CustomerDashboard = () => {
     
     // Add total amount
     const finalY = doc.lastAutoTable.finalY || 110;
-    doc.text(`Total Amount: $${order.total_amount.toFixed(2)}`, 150, finalY + 20, { align: 'right' });
+    doc.text(`Total Amount: ₹${order.total_amount.toFixed(2)}`, 150, finalY + 20, { align: 'right' });
     
     // Save the PDF
     doc.save(`order-${order.order_id}.pdf`);
@@ -158,7 +158,7 @@ const CustomerDashboard = () => {
             {artwork.artist_name}
           </Typography>
           <Typography variant="h6" color="primary">
-            ${artwork.price?.toLocaleString()}
+            ₹{artwork.price?.toLocaleString()}
           </Typography>
         </CardContent>
       </Card>
@@ -206,7 +206,7 @@ const CustomerDashboard = () => {
                           Order #{order.order_id} - {new Date(order.date).toLocaleDateString()}
                         </Typography>
                         <Typography sx={{ color: 'text.secondary' }}>
-                          ${order.total_amount.toFixed(2)}
+                          ₹{order.total_amount.toFixed(2)}
                         </Typography>
                       </Box>
                     </AccordionSummary>
@@ -220,7 +220,7 @@ const CustomerDashboard = () => {
                           <Typography>Artwork: {order.artwork_title}</Typography>
                           <Typography>Artist: {order.artist_name}</Typography>
                           <Typography>Quantity: {order.quantity}</Typography>
-                          <Typography>Price per item: ${order.price.toFixed(2)}</Typography>
+                          <Typography>Price per item: ₹{order.price.toFixed(2)}</Typography>
                         </Grid>
                         <Grid item xs={12} md={6}>
                           <Typography variant="subtitle1" gutterBottom>

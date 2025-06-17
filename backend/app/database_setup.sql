@@ -98,7 +98,7 @@ INSERT IGNORE INTO artists (name, email, password_hash) VALUES
 
 -- Sample customers
 INSERT IGNORE INTO customers (name, email, password_hash) VALUES
-('Alice Johnson', 'alice@example.com', '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewFX.gtkn.4xGxK2');
+('Alice Johnson', 'alice@example.com', '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewFX.gtkn.4xGxK2');  
 
 -- Sample galleries
 INSERT IGNORE INTO galleries (name, email, password_hash, description, location) VALUES

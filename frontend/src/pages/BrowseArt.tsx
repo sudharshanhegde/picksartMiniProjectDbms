@@ -142,8 +142,8 @@ function BrowseArt() {
                 step={100}
               />
               <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <Typography variant="body2">${priceRange[0]}</Typography>
-                <Typography variant="body2">${priceRange[1]}</Typography>
+                <Typography variant="body2">₹{priceRange[0]}</Typography>
+                <Typography variant="body2">₹{priceRange[1]}</Typography>
               </Box>
             </Grid>
           </Grid>
@@ -180,7 +180,7 @@ function BrowseArt() {
                     {artwork.description}
                   </Typography>
                   <Typography variant="h6" color="primary">
-                    ${artwork.price.toLocaleString()}
+                    ₹{artwork.price.toLocaleString()}
                   </Typography>
                 </CardContent>
                 <CardActions>

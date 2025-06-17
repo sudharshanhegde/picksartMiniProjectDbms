@@ -141,7 +141,7 @@ function Cart() {
                     by {item.artist_name}
                   </Typography>
                   <Typography variant="h6" color="primary">
-                    ${item.price.toLocaleString()}
+                    ₹{item.price.toLocaleString()}
                   </Typography>
                   
                   <Box sx={{ display: 'flex', alignItems: 'center', mt: 2 }}>
@@ -181,7 +181,7 @@ function Cart() {
             <Divider sx={{ my: 2 }} />
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
               <Typography>Subtotal</Typography>
-              <Typography>${total.toLocaleString()}</Typography>
+              <Typography>₹{total.toLocaleString()}</Typography>
             </Box>
             <Box sx={{ mt: 4, display: 'flex', flexDirection: 'column', gap: 2 }}>
               <Button
